@@ -63,7 +63,7 @@ En caso de fallo de conectividad en el servidor principal, el proyecto cuenta co
 
 ## 🔧 Herramientas de Desarrollo (DevTools)
 
-Se han desarrollado scripts en **AutoHotkey v2** para optimizar el ciclo de vida del desarrollo (Hot-reloading):
+Se desarrollan scripts en **AutoHotkey v2** para optimizar el ciclo de vida del desarrollo (Hot-reloading):
 
 * **`server_reload.ahk`**: Automatiza el reinicio del servicio Odoo y la actualización del módulo tras cambios en Python/XML (`-u hardware_rma`).
 * **`keep_alive.ahk`**: Garantiza la disponibilidad del servidor evitando la suspensión del sistema anfitrión durante el despliegue.
@@ -72,7 +72,7 @@ Se han desarrollado scripts en **AutoHotkey v2** para optimizar el ciclo de vida
 
 1. Clonar el repositorio:
 ```bash
-git clone [https://github.com/tu-usuario/odoo-hardware-rma-pro.git](https://github.com/tu-usuario/odoo-hardware-rma-pro.git)
+git clone [https://github.com/Anyeel/odoo-hardware-rma-pro.git](https://github.com/Anyeel/odoo-hardware-rma-pro.git)
 
 ```
 
