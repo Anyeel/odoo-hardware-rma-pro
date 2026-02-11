@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_rma_ticket_tree" model="ir.ui.view">
+        <field name="name">hardware.rma.ticket.tree</field>
+        <field name="model">hardware.rma.ticket</field>
+        <field name="arch" type="xml">
+            <tree string="Tickets RMA" decoration-danger="priority=='3'" decoration-muted="state=='done'">
+                <field name="name"/>
+                <field name="subject"/>
+                <field name="partner_id"/>
+                <field name="product_id"/>
+                <field name="purchase_date"/>
+                <field name="warranty_expired" widget="boolean_toggle"/>
+                <field name="priority" widget="priority"/>
+                <field name="state" widget="badge" decoration-success="state=='done'" decoration-info="state=='diagnosis'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_rma_ticket_form" model="ir.ui.view">
+        <field name="name">hardware.rma.ticket.form</field>
+        <field name="model">hardware.rma.ticket</field>
+        <field name="arch" type="xml">
+            <form string="Ticket RMA">
+<header>
+                    <button name="action_confirm" string="Confirmar RMA" type="object" class="oe_highlight" 
+                            invisible="state != 'draft'"/>
+                            
+                    <button name="action_start_diagnosis" string="Iniciar Diagnóstico" type="object" class="oe_highlight" 
+                            invisible="state != 'confirmed'"/>
+                            
+                    <button name="action_start_repair" string="Reparar" type="object" class="oe_highlight" 
+                            invisible="state != 'diagnosis'"/>
+                            
+                    <button name="action_done" string="Entregar al Cliente" type="object" class="oe_highlight" 
+                            invisible="state != 'repair'"/>
+                            
+                    <button name="action_cancel" string="Cancelar" type="object" 
+                            invisible="state in ('done', 'cancel')"/>
+                            
+                    <button name="action_draft" string="Volver a Borrador" type="object" 
+                            invisible="state not in ('cancel', 'done')"/>
+
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,diagnosis,repair,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Información del Cliente">
+                            <field name="subject"/>
+                            <field name="partner_id"/>
+                            <field name="priority" widget="priority"/>
+                        </group>
+                        <group string="Datos del Hardware">
+                            <field name="product_id"/>
+                            <field name="serial_number"/>
+                            <field name="purchase_date"/>
+                            <field name="warranty_expired" readonly="1" force_save="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Descripción del Problema">
+                            <field name="description" placeholder="Describe aquí el fallo del hardware..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_rma_ticket" model="ir.actions.act_window">
+        <field name="name">Tickets RMA</field>
+        <field name="res_model">hardware.rma.ticket</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            ¡Crea tu primer Ticket de Reparación!
+          </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_rma_root" name="Hardware RMA" web_icon="hardware_rma,static/description/icon.png" action="action_rma_ticket"/>
+</odoo>

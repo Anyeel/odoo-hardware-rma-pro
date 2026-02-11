@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="seq_hardware_rma_ticket" model="ir.sequence">
+            <field name="name">Secuencia de Tickets RMA</field>
+            <field name="code">hardware.rma.ticket</field>
+            <field name="prefix">RMA/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,15 @@
+# 1. IGNORAR ABSOLUTAMENTE TODO EN ESTA CARPETA
+/*
+
+# 2. EXCEPCIONES: Lo único que SÍ quiero subir a mi GitHub
+!/custom_addons/
+!/docker-compose.yml
+!/README.md
+!/.gitignore
+
+# 3. Limpieza interna (Ignorar archivos basura dentro de custom_addons)
+__pycache__/
+*.pyc
+*.pyo
+.DS_Store
+Thumbs.db
