@@ -22,7 +22,7 @@ class RMATicket(models.Model):
     purchase_date = fields.Date(string='Fecha de Compra')
     warranty_expired = fields.Boolean(string='Garantía Expirada', compute='_compute_warranty_status', store=True)
 
-    # --- BARRA DE ESTADO (El proceso visual) ---
+# --- BARRA DE ESTADO (El proceso visual) ---
     state = fields.Selection([
         ('draft', 'Borrador'),
         ('confirmed', 'Confirmado'),
@@ -30,7 +30,15 @@ class RMATicket(models.Model):
         ('repair', 'En Reparación'),
         ('done', 'Entregado'),
         ('cancel', 'Cancelado'),
-    ], string='Estado', default='draft', tracking=True)
+    ], string='Estado', default='draft', tracking=True, group_expand='_expand_states')
+
+    @api.model
+    def _expand_states(self, states, domain, order):
+        """
+        Fuerza a la vista Kanban a mostrar todas las columnas siempre, 
+        incluso si no hay tickets en ese estado.
+        """
+        return ['draft', 'confirmed', 'diagnosis', 'repair', 'done', 'cancel']
 
     # --- PRIORIDAD (Estrellas) ---
     priority = fields.Selection([
@@ -75,7 +83,7 @@ class RMATicket(models.Model):
         
         # Llamamos al método original (super) para que guarde el registro en la base de datos
         return super().create(vals_list)
-        
+
     # --- LÓGICA INTELIGENTE ---
     # Esto calcula automáticamente si la garantía vale o no
     @api.depends('purchase_date')

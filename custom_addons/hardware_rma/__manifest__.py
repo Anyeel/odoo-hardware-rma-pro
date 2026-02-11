@@ -9,6 +9,7 @@
         'security/ir.model.access.csv', # Esto lo crearemos ahora, no te preocupes si no existe
         'data/ir_sequence_data.xml',
         'views/rma_views.xml',
+        'report/rma_report.xml',
     ],
     'installable': True,
     'application': True,

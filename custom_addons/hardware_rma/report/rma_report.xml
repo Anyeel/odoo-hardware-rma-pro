@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_rma_ticket" model="ir.actions.report">
+        <field name="name">Resguardo de Reparación (PDF)</field>
+        <field name="model">hardware.rma.ticket</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hardware_rma.report_rma_ticket_template</field>
+        <field name="report_file">hardware_rma.report_rma_ticket_template</field>
+        <field name="print_report_name">'RMA - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_hardware_rma_ticket"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_rma_ticket_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="row mt-4 mb-4">
+                            <div class="col-8">
+                                <h2>
+                                    <span>Resguardo RMA: </span>
+                                    <span t-field="doc.name" style="color: #714B67;"/>
+                                </h2>
+                            </div>
+                            <div class="col-4 text-end">
+                                <img t-att-src="'/report/barcode/?barcode_type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', doc.name, 600, 100)" style="width:200px;height:40px" alt="Barcode"/>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4" style="background-color: #f8f9fa; padding: 15px; border-radius: 5px;">
+                            <div class="col-4">
+                                <strong>Cliente:</strong>
+                                <p class="m-0" t-field="doc.partner_id"/>
+                            </div>
+                            <div class="col-4">
+                                <strong>Fecha de Registro:</strong>
+                                <p class="m-0" t-field="doc.create_date" t-options='{"widget": "date"}'/>
+                            </div>
+                            <div class="col-4">
+                                <strong>Estado Actual:</strong>
+                                <p class="m-0" t-field="doc.state"/>
+                            </div>
+                        </div>
+
+                        <table class="table table-sm o_main_table mt-5">
+                            <thead style="display: table-row-group">
+                                <tr>
+                                    <th>Equipo Afectado</th>
+                                    <th>Número de Serie (S/N)</th>
+                                    <th>Estado de la Garantía</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span t-field="doc.product_id"/></td>
+                                    <td><span t-field="doc.serial_number"/></td>
+                                    <td>
+                                        <span t-if="doc.warranty_expired" style="color: red; font-weight: bold;">Expirada (Fuera de cobertura)</span>
+                                        <span t-if="not doc.warranty_expired" style="color: green; font-weight: bold;">Vigente (Cubre mano de obra)</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="mt-5">
+                            <h4>Descripción de la Avería reportada:</h4>
+                            <p t-field="doc.description" style="border-left: 3px solid #714B67; padding-left: 10px;"/>
+                        </div>
+                        
+                        <div class="mt-5" style="font-size: 10px; color: grey;">
+                            <p>Condiciones: El cliente acepta que la pérdida de datos durante la reparación no es responsabilidad de la empresa. Al firmar la entrega, el cliente certifica el estado del equipo.</p>
+                            <br/><br/>
+                            <p>Firma del Técnico: _______________________ <span style="margin-left:50px;">Firma del Cliente: _______________________</span></p>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
