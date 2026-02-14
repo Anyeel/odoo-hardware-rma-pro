@@ -1,93 +1,103 @@
-# 🚀 Odoo Hardware RMA Management
+# Odoo Hardware RMA Pro
 
-![Odoo Version](https://img.shields.io/badge/Odoo-17.0-purple) ![Python](https://img.shields.io/badge/Python-3.12-blue) ![Status](https://img.shields.io/badge/Status-Development-green)
+![Odoo Version](https://img.shields.io/badge/Odoo-17.0-purple?style=flat&logo=odoo)
+![Docker](https://img.shields.io/badge/Docker-Containerized-blue?style=flat&logo=docker)
+![CI/CD](https://img.shields.io/badge/GitHub%20Actions-Passing-brightgreen?style=flat&logo=githubactions)
+![Security](https://img.shields.io/badge/Cloudflare-Zero%20Trust-orange?style=flat&logo=cloudflare)
 
-Este proyecto implementa una solución ERP personalizada sobre **Odoo 17 Community Edition** para una empresa de hardware. El núcleo del proyecto es el desarrollo de un módulo *ad-hoc* (`hardware_rma`) que extiende la funcionalidad nativa de inventario para gestionar devoluciones, garantías y diagnósticos técnicos.
+Solución ERP integral para la gestión de devoluciones y garantías de hardware (RMA). Este proyecto no es solo un módulo, es una **arquitectura de microservicios completa** basada en Odoo 17, diseñada para entornos de producción modernos.
 
-## 📋 Descripción del Proyecto
+## Características Premium
 
-A diferencia de una implementación estándar, este proyecto incluye desarrollo **Backend (Python)** y **Frontend (XML Views)** para cubrir necesidades específicas del sector IT:
-1.  **Validación Automática de Garantías:** Cálculo de vigencia basado en nº de serie y fecha de compra.
-2.  **Flujo de Trabajo RMA:** Pipeline de estados (Borrador -> Diagnóstico -> Reparación -> Entregado).
-3.  **Trazabilidad:** Historial completo de intervenciones por componente.
+Este sistema supera una implementación estándar académica incluyendo funcionalidades de consultoría real:
+
+1.  **⚡ Flujo de Trabajo (Workflow) con Bloqueo:**
+    * Estados lógicos: *Borrador ➝ Confirmado ➝ Diagnóstico ➝ Reparación ➝ Entregado*.
+    * **Seguridad:** Los tickets se bloquean (Read-only) automáticamente al finalizar para garantizar la integridad de los datos.
+2.  **🎨 Vista Kanban Interactiva:**
+    * Gestión visual tipo "Trello" con columnas fijas y *Drag & Drop* para mover tickets entre estados.
+3.  **📄 Reportes QWeb PDF Inteligentes:**
+    * Generación de resguardos de reparación con **Código de Barras** dinámico y términos legales.
+4.  **🔢 Secuenciación Automática:**
+    * Generación de IDs únicos profesionales (ej: `RMA/2026/0045`) mediante reglas de secuencia XML.
+5.  **🤖 DevOps & CI/CD:**
+    * Despliegue automatizado con **Docker Compose**.
+    * Pipeline de Integración Continua con **GitHub Actions** para testear el código en cada *push*.
+
+---
 
 ## 🛠️ Stack Tecnológico
 
-* **Core:** Odoo 17.0 (Source Install)
-* **Base de Datos:** PostgreSQL 16
-* **Lenguaje:** Python 3.12 + XML (QWeb)
-* **DevOps:** Docker (opcional), Cloudflare Tunnel
-* **Automatización:** AutoHotkey v2 (para flujos de desarrollo y mantenimiento)
+| Capa | Tecnología | Descripción |
+| :--- | :--- | :--- |
+| **Orquestación** | Docker Compose | Contenedores aislados para Web y Base de Datos. |
+| **Backend** | Python 3.10 + Odoo ORM | Lógica de negocio, Restricciones y Modelos. |
+| **Frontend** | XML + QWeb | Vistas Form, Tree, Kanban y Reportes PDF. |
+| **Base de Datos** | PostgreSQL 16 | Persistencia de datos gestionada por Docker. |
+| **Red & Seguridad** | Cloudflare Tunnel | Exposición segura HTTPS sin abrir puertos (CGNAT friendly). |
 
-## 📂 Estructura del Módulo (`hardware_rma`)
+---
 
-El desarrollo sigue la arquitectura MVC estricta de Odoo:
+## 📂 Estructura del Proyecto
+
+El repositorio sigue las mejores prácticas de "Clean Code" ignorando archivos binarios de Odoo:
 
 ```text
-hardware_rma/
-├── models/
-│   ├── rma_ticket.py       # Lógica de negocio y estados del ticket
-│   └── product_inherit.py  # Herencia del modelo product.template
-├── views/
-│   ├── rma_views.xml       # Vistas Form, Tree y Kanban
-│   └── rma_menus.xml       # Estructura de menús en Odoo
-├── security/
-│   └── ir.model.access.csv # Listas de control de acceso (ACLs)
-├── __manifest__.py         # Metadatos y dependencias
-└── __init__.py
+odoo-hardware-rma-pro/
+├── .github/workflows/      # 🤖 Pipeline CI/CD (Tests automáticos)
+├── custom_addons/          # 📦 Módulos desarrollados a medida
+│   └── hardware_rma/
+│       ├── models/         # Lógica Python (Tickets, Productos)
+│       ├── views/          # Interfaz XML (Kanban, Menús)
+│       ├── report/         # Plantillas PDF y Códigos de Barras
+│       ├── data/           # Secuencias automáticas (No Update)
+│       └── security/       # ACLs (Permisos de acceso)
+├── docker-compose.yml      # 🐳 Infraestructura como Código (IaC)
+└── README.md               # Documentación
 
 ```
 
-## 🚀 Estrategia de Despliegue (Deployment)
+---
 
-Para la presentación y uso en producción, se ha diseñado una arquitectura de **Self-Hosting** accesible públicamente sin exponer puertos vulnerables.
+## 🚀 Guía de Despliegue (Deployment)
 
-### 1. Servidor Principal (Tunneled)
+Existen dos formas de arrancar este proyecto:
 
-El sistema corre en un servidor local protegido, expuesto a internet mediante **Cloudflare Tunnel**. Esto garantiza:
+### Opción A: Despliegue en Producción (Demo Remota)
 
-* Conexión **HTTPS/SSL** segura.
-* Sin necesidad de abrir puertos en el router (CGNAT friendly).
-* Acceso global mediante URL dedicada.
+Para la presentación en clase, se utiliza una arquitectura **Zero Trust** mediante Cloudflare.
 
-Comando de despliegue:
+1. **Arrancar servicios:**
+```bash
+docker compose up -d
 
+```
+
+
+2. **Abrir Túnel Seguro (HTTPS):**
 ```bash
 cloudflared tunnel --url http://localhost:8069
 
 ```
 
-### 2. Plan de Recuperación ante Desastres (DRP)
+*Esto generará una URL pública temporal (ej: `https://demo-rma.trycloudflare.com`) accesible desde la red del instituto.*
 
-En caso de fallo de conectividad en el servidor principal, el proyecto cuenta con una réplica local completa en el equipo de presentación (Laptop), sincronizada vía Git, asegurando la continuidad de la demostración.
+### Opción B: Despliegue Local (Contingencia)
 
-## 🔧 Herramientas de Desarrollo (DevTools)
+Si no hay internet, el sistema funciona 100% offline:
 
-Se desarrollan scripts en **AutoHotkey v2** para optimizar el ciclo de vida del desarrollo (Hot-reloading):
-
-* **`server_reload.ahk`**: Automatiza el reinicio del servicio Odoo y la actualización del módulo tras cambios en Python/XML (`-u hardware_rma`).
-* **`keep_alive.ahk`**: Garantiza la disponibilidad del servidor evitando la suspensión del sistema anfitrión durante el despliegue.
-
-## 📦 Instalación Local
-
-1. Clonar el repositorio:
+1. Clonar y levantar:
 ```bash
 git clone [https://github.com/Anyeel/odoo-hardware-rma-pro.git](https://github.com/Anyeel/odoo-hardware-rma-pro.git)
+cd odoo-hardware-rma-pro
+docker compose up -d
 
 ```
 
-2. Crear entorno virtual e instalar dependencias:
-```bash
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
+2. Acceder vía navegador:
+* URL: `http://localhost:8069`
 
-```
+---
 
-3. Ejecutar Odoo apuntando al directorio de módulos custom:
-```bash
-python odoo-bin -c odoo.conf --addons-path=addons,./custom_addons
+*Proyecto desarrollado por Ángel Millán para el módulo de Sistemas de Gestión Empresarial (SGE) - Desarrollo de Aplicaciones Multiplataforma.*
 
-```
-
-*Proyecto desarrollado para el módulo de Sistemas de Gestión Empresarial (SGE) - DAM.*
