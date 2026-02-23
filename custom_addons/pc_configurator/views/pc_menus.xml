@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_pc_configurator_root"
+              name="Configurador PC"
+              sequence="15"/>
+
+    <menuitem id="menu_pc_build"
+              name="Presupuestos a Medida"
+              parent="menu_pc_configurator_root"
+              action="action_pc_build"
+              sequence="10"/>
+</odoo>
